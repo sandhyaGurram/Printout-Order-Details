@@ -1,0 +1,18 @@
+.label {
+  width: 80mm;
+  padding: 5px;
+  font-size: 12px;
+}
+
+@media print {
+
+  body {
+    width: 80mm;
+  }
+
+  .label {
+    width: 80mm;
+    padding: 5px;
+    font-size: 12px;
+  }
+}
