@@ -160,6 +160,9 @@ const handlePrint = () => {
           // th {
           //   font-weight: bold;
           // }
+          .lable-preview tbody td{
+          font-size:12px;
+          }
 
         </style>
       </head>
