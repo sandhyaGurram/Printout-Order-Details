@@ -18,6 +18,8 @@ const orderSchema = new mongoose.Schema({
 
     paymentType: String,
 
+
+
     items: [
         {
             productName: String,

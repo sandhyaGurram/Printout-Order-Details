@@ -1,11 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import PrintLabel from "./PrintLabel";
 
 function OrderPreview({ order }) {
 
   const printRef = useRef();
-  const [selectedOrder, setSelectedOrder] = useState(order);
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -21,9 +20,9 @@ function OrderPreview({ order }) {
 
   return (
     <>
-      <div className="order-card">
+      <div>
 
-        <h2>Latest Order</h2>
+        <h2>Current Order</h2>
 
         <p><strong>Name:</strong> {order.customerName}</p>
 
@@ -37,17 +36,8 @@ function OrderPreview({ order }) {
 
         <p>{order.pincode}</p>
 
-        <p>{order.paymentType}</p>
-
         <button
-          className="btn"
-          onClick={() => {
-            setSelectedOrder(order);
-
-            setTimeout(() => {
-              handlePrint();
-            }, 100);
-          }}
+          onClick={handlePrint}
         >
           Print Label
         </button>
@@ -57,11 +47,11 @@ function OrderPreview({ order }) {
       <div
         style={{
           position: "absolute",
-          left: "-9999px",
+          left: "-9999px"
         }}
       >
         <div ref={printRef}>
-          <PrintLabel order={selectedOrder} />
+          <PrintLabel order={order} />
         </div>
       </div>
     </>
