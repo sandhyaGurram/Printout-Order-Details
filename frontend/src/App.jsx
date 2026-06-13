@@ -141,7 +141,7 @@ const handlePrint = () => {
   padding: 5mm;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
-  font-size: 12px;
+  font-size: 10px;
           }
 
           table {
@@ -153,13 +153,13 @@ const handlePrint = () => {
           th,
           td {
             border: 1px solid black;
-            padding: 4px;
+            padding: 2px;
             text-align: center;
           }
 
-          th {
-            font-weight: bold;
-          }
+          // th {
+          //   font-weight: bold;
+          // }
 
         </style>
       </head>
