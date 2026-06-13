@@ -141,13 +141,13 @@ const handlePrint = () => {
   padding: 5mm;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
           }
 
           table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 5px;
           }
 
           th,
@@ -324,13 +324,13 @@ const handlePrint = () => {
 
       </div>
 
-      <div>
+      <div className="lable-preview">
 
         <h2>Label Preview</h2>
 
         {savedOrder && (
-          <div ref={labelRef} id="label">
-            <h3>Ship to:</h3>
+          <div  ref={labelRef} id="label">
+            <p><strong>Ship to:</strong></p>
 
             <p><strong>Name: </strong>{savedOrder.customerName}</p>
             <p><strong>Address: </strong>{savedOrder.address}, {savedOrder.pincode}</p>
@@ -341,14 +341,14 @@ const handlePrint = () => {
 
             <p><strong>Payment: </strong>{savedOrder.paymentType}</p>
             <table className="table table-bordered">
-              <thead>
+              {/* <thead>
   <tr>
     <th>Item</th>
     <th>Quantity</th>
     <th>Price</th>
     <th>Total</th>
   </tr>
-</thead>
+</thead> */}
               <tbody>
   {savedOrder.items?.map((item, index) => (
     <tr key={index}>
@@ -364,8 +364,8 @@ const handlePrint = () => {
   <strong>Grand Total:</strong> ₹{grandTotal}
 </p>
         
-            <h3><strong>Shipped by</strong>(if undelivered, return to)</h3>
-            <h3>{STORE_INFO.name}</h3>
+            <p><strong>Shipped by</strong>(if undelivered, return to)</p>
+            <p>{STORE_INFO.name}</p>
 
   <p>{STORE_INFO.address}</p>
   <p>
