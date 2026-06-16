@@ -168,11 +168,12 @@ function Orders() {
       {
         accessorKey: "orderId",
         header: "Order ID",
+        size: 50,
       },
       {
         accessorKey: "customerName",
         header: "Customer",
-        size: 80,
+        size: 50,
       },
       {
         accessorKey: "productName",
@@ -192,7 +193,7 @@ function Orders() {
       {
         accessorKey: "address",
         header: "Address",
-        size: 100,
+        size: 120,
       },
       {
         accessorKey: "pincode",
