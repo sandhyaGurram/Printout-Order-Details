@@ -154,6 +154,7 @@ import { MaterialReactTable } from "material-react-table";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [rowSelection, setRowSelection] = useState({});
 
   useEffect(() => {
     axios
@@ -162,6 +163,18 @@ function Orders() {
         setOrders(res.data);
       });
   }, []);
+
+  const printLabel = (order) => {
+    console.log("Single Print", order);
+  };
+
+  const printSelectedLabels = () => {
+    const selectedOrders = Object.keys(rowSelection).map(
+      (index) => orders[index],
+    );
+
+    console.log("Selected Orders", selectedOrders);
+  };
 
   const columns = useMemo(
     () => [
@@ -237,19 +250,13 @@ function Orders() {
           margin: "10px auto",
         }}
       >
-        <button
-          onClick={printSelectedLabels}
-          style={{
-            marginBottom: "10px",
-            padding: "10px 15px",
-          }}
-        >
-          Print Selected Labels
-        </button>
+        <button onClick={printSelectedLabels}>Print Selected Labels</button>
         <MaterialReactTable
           columns={columns}
           data={orders}
           enableRowSelection
+          onRowSelectionChange={setRowSelection}
+          state={{ rowSelection }}
           enableColumnResizing
           layoutMode="grid"
         />
