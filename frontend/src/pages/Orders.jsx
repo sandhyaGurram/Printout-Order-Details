@@ -185,11 +185,10 @@ function Orders() {
     phone: "9848210555",
   };
 
-  const grandTotal =
-    savedOrder?.items?.reduce((sum, item) => sum + item.qty * item.price, 0) ||
-    0;
-
   const handlePrint = (order) => {
+    const grandTotal =
+      order.items?.reduce((sum, item) => sum + item.qty * item.price, 0) || 0;
+
     const products = order.items
       ?.map(
         (item) => `
@@ -263,8 +262,8 @@ function Orders() {
         </table>
 
         <p>
-                <strong>Grand Total:</strong> ₹{grandTotal}
-               </p>
+  <strong>Grand Total:</strong> ₹${grandTotal}
+</p>
 
      
 
@@ -292,7 +291,9 @@ function Orders() {
   `);
 
     win.document.close();
-    win.print();
+    win.onload = () => {
+      win.print();
+    };
   };
 
   const columns = useMemo(
