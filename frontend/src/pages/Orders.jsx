@@ -174,8 +174,24 @@ function Orders() {
         header: "Customer",
       },
       {
+        accessorKey: "productName",
+        header: "product Name",
+      },
+      {
+        accessorKey: "qty",
+        header: "Quantity",
+      },
+      {
+        accessorKey: "price",
+        header: "Price",
+      },
+      {
         accessorKey: "address",
         header: "Address",
+      },
+      {
+        accessorKey: "pincode",
+        header: "Pincode",
       },
       {
         accessorKey: "phone",
@@ -185,10 +201,7 @@ function Orders() {
         accessorKey: "paymentType",
         header: "Payment",
       },
-      {
-        accessorKey: "pincode",
-        header: "Pincode",
-      },
+
       {
         accessorKey: "createdAt",
         header: "Created On",
