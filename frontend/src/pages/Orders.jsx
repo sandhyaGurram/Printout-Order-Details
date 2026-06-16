@@ -193,7 +193,13 @@ function Orders() {
     [],
   );
 
-  return <MaterialReactTable columns={columns} data={orders} />;
+  return (
+    <>
+      <div className="col-8">
+        <MaterialReactTable columns={columns} data={orders} />
+      </div>
+    </>
+  );
 }
 
 export default Orders;
