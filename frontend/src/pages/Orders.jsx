@@ -174,6 +174,10 @@ function Orders() {
         header: "Customer",
       },
       {
+        accessorKey: "address",
+        header: "Address",
+      },
+      {
         accessorKey: "phone",
         header: "Phone",
       },
