@@ -164,9 +164,9 @@ function Orders() {
       });
   }, []);
 
-  const printLabel = (order) => {
-    console.log("Single Print", order);
-  };
+  // const printLabel = (order) => {
+  //   console.log("Single Print", order);
+  // };
 
   const printSelectedLabels = () => {
     const selectedOrders = Object.keys(rowSelection).map(
@@ -176,8 +176,19 @@ function Orders() {
     console.log("Selected Orders", selectedOrders);
   };
 
-  const handlePrint = () => {
-    const printContents = labelRef.current.innerHTML;
+  const handlePrint = (order) => {
+    const products = order.items
+      ?.map(
+        (item) => `
+        <tr>
+          <td>${item.productName}</td>
+          <td>${item.qty}</td>
+          <td>${item.price}</td>
+          <td>${item.qty * item.price}</td>
+        </tr>
+      `,
+      )
+      .join("");
 
     const win = window.open("", "", "");
 
@@ -187,67 +198,132 @@ function Orders() {
         <title>Print Label</title>
 
         <style>
-        @page {
-  size: 100mm 150mm;
-  margin: 0;
-}
+          @page {
+            size: 100mm 150mm;
+            margin: 0;
+          }
+
           body {
-            width: 100mm;
-    height: 150mm;
-  margin: 0;
-  padding: 5mm;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  font-size: 10px;
+            padding: 5mm;
+            font-family: Arial;
+            font-size: 12px;
           }
 
           table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 5px;
           }
 
-          th,
-          td {
-            border: 1px solid black;
-            padding: 2px;
-            text-align: center;
+          th, td {
+            border: 1px solid #000;
+            padding: 4px;
           }
-
-          td.item-col {
-  width: 50%;
-  font-size: 9px;
-}
-
-td.qty-col {
-  width: 10%;
-}
-
-td.price-col {
-  width: 20%;
-}
-
-td.total-col {
-  width: 20%;
-}
-          tbody td,th {
-  font-size: 9px;
-  
-}
-
         </style>
       </head>
 
       <body>
-        ${printContents}
+
+        <h3>Ship To</h3>
+
+        <p><b>Name:</b> ${order.customerName}</p>
+        <p><b>Phone:</b> ${order.phone}</p>
+        <p><b>Address:</b> ${order.address}</p>
+        <p><b>Pincode:</b> ${order.pincode}</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${products}
+          </tbody>
+        </table>
+
       </body>
     </html>
   `);
 
     win.document.close();
     win.print();
-    win.close();
   };
+  //   const handlePrint = (order) => {
+  //     const printContents = labelRef.current.innerHTML;
+
+  //     const win = window.open("", "", "");
+
+  //     win.document.write(`
+  //     <html>
+  //       <head>
+  //         <title>Print Label</title>
+
+  //         <style>
+  //         @page {
+  //   size: 100mm 150mm;
+  //   margin: 0;
+  // }
+  //           body {
+  //             width: 100mm;
+  //     height: 150mm;
+  //   margin: 0;
+  //   padding: 5mm;
+  //   box-sizing: border-box;
+  //   font-family: Arial, sans-serif;
+  //   font-size: 10px;
+  //           }
+
+  //           table {
+  //             width: 100%;
+  //             border-collapse: collapse;
+  //             margin-top: 5px;
+  //           }
+
+  //           th,
+  //           td {
+  //             border: 1px solid black;
+  //             padding: 2px;
+  //             text-align: center;
+  //           }
+
+  //           td.item-col {
+  //   width: 50%;
+  //   font-size: 9px;
+  // }
+
+  // td.qty-col {
+  //   width: 10%;
+  // }
+
+  // td.price-col {
+  //   width: 20%;
+  // }
+
+  // td.total-col {
+  //   width: 20%;
+  // }
+  //           tbody td,th {
+  //   font-size: 9px;
+
+  // }
+
+  //         </style>
+  //       </head>
+
+  //       <body>
+  //         ${printContents}
+  //       </body>
+  //     </html>
+  //   `);
+
+  //     win.document.close();
+  //     win.print();
+  //     win.close();
+  //   };
 
   const STORE_INFO = {
     name: "ARM Pearl Beauty",
@@ -322,7 +398,7 @@ td.total-col {
       {
         header: "Actions",
         Cell: ({ row }) => (
-          <button onClick={() => printLabel(row.original)}>Print Label</button>
+          <button onClick={() => handlePrint(row.original)}>Print Label</button>
         ),
       },
     ],
