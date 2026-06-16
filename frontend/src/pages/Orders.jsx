@@ -172,34 +172,42 @@ function Orders() {
       {
         accessorKey: "customerName",
         header: "Customer",
+        size: 80,
       },
       {
         accessorKey: "productName",
         header: "product Name",
+        size: 80,
       },
       {
         accessorKey: "qty",
         header: "Quantity",
+        size: 50,
       },
       {
         accessorKey: "price",
         header: "Price",
+        size: 50,
       },
       {
         accessorKey: "address",
         header: "Address",
+        size: 100,
       },
       {
         accessorKey: "pincode",
         header: "Pincode",
+        size: 50,
       },
       {
         accessorKey: "phone",
         header: "Phone",
+        size: 50,
       },
       {
         accessorKey: "paymentType",
         header: "Payment",
+        size: 50,
       },
 
       {
@@ -216,10 +224,15 @@ function Orders() {
       <div
         style={{
           width: "80%",
-          margin: "20px auto",
+          margin: "10px auto",
         }}
       >
-        <MaterialReactTable columns={columns} data={orders} />
+        <MaterialReactTable
+          columns={columns}
+          data={orders}
+          enableColumnResizing
+          layoutMode="grid"
+        />
       </div>
     </>
   );
