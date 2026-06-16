@@ -219,6 +219,12 @@ function Orders() {
         header: "Created On",
         Cell: ({ cell }) => new Date(cell.getValue()).toLocaleString("en-IN"),
       },
+      {
+        header: "Actions",
+        Cell: ({ row }) => (
+          <button onClick={() => printLabel(row.original)}>Print Label</button>
+        ),
+      },
     ],
     [],
   );
@@ -231,9 +237,19 @@ function Orders() {
           margin: "10px auto",
         }}
       >
+        <button
+          onClick={printSelectedLabels}
+          style={{
+            marginBottom: "10px",
+            padding: "10px 15px",
+          }}
+        >
+          Print Selected Labels
+        </button>
         <MaterialReactTable
           columns={columns}
           data={orders}
+          enableRowSelection
           enableColumnResizing
           layoutMode="grid"
         />
