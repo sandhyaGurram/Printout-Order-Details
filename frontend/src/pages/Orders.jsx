@@ -195,7 +195,12 @@ function Orders() {
 
   return (
     <>
-      <div className="col-8">
+      <div
+        style={{
+          width: "80%",
+          margin: "20px auto",
+        }}
+      >
         <MaterialReactTable columns={columns} data={orders} />
       </div>
     </>
