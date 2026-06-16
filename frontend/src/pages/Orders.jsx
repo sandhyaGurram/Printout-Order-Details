@@ -185,6 +185,10 @@ function Orders() {
     phone: "9848210555",
   };
 
+  const grandTotal =
+    savedOrder?.items?.reduce((sum, item) => sum + item.qty * item.price, 0) ||
+    0;
+
   const handlePrint = (order) => {
     const products = order.items
       ?.map(
@@ -226,6 +230,7 @@ function Orders() {
           th, td {
             border: 1px solid #000;
             padding: 4px;
+            font-size:11px
           }
         </style>
       </head>
@@ -238,8 +243,9 @@ function Orders() {
 
         <p><b>Name:</b> ${order.customerName}</p>
         <p><b>Phone:</b> ${order.phone}</p>
-        <p><b>Address:</b> ${order.address}</p>
-        <p><b>Pincode:</b> ${order.pincode}</p>
+        <p><b>Address:</b> ${order.address},${order.pincode}</p>
+        <p><b>Payment:</b> ${order.paymentType}</p>
+        <p><b>Order Id:</b> ${order.orderId}</p>
 
         <table>
           <thead>
@@ -256,7 +262,11 @@ function Orders() {
           </tbody>
         </table>
 
-        <hr />
+        <p>
+                <strong>Grand Total:</strong> ₹{grandTotal}
+               </p>
+
+     
 
 <h3>Shipped By</h3>
 

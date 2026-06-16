@@ -211,3 +211,6 @@ td {
 hr {
   margin: 8px 0;
 }
+thead tr th{
+font-size: 11px;
+}
