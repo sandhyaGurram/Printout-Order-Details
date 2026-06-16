@@ -176,6 +176,93 @@ function Orders() {
     console.log("Selected Orders", selectedOrders);
   };
 
+  const handlePrint = () => {
+    const printContents = labelRef.current.innerHTML;
+
+    const win = window.open("", "", "");
+
+    win.document.write(`
+    <html>
+      <head>
+        <title>Print Label</title>
+
+        <style>
+        @page {
+  size: 100mm 150mm;
+  margin: 0;
+}
+          body {
+            width: 100mm;
+    height: 150mm;
+  margin: 0;
+  padding: 5mm;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+          }
+
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+          }
+
+          th,
+          td {
+            border: 1px solid black;
+            padding: 2px;
+            text-align: center;
+          }
+
+          td.item-col {
+  width: 50%;
+  font-size: 9px;
+}
+
+td.qty-col {
+  width: 10%;
+}
+
+td.price-col {
+  width: 20%;
+}
+
+td.total-col {
+  width: 20%;
+}
+          tbody td,th {
+  font-size: 9px;
+  
+}
+
+        </style>
+      </head>
+
+      <body>
+        ${printContents}
+      </body>
+    </html>
+  `);
+
+    win.document.close();
+    win.print();
+    win.close();
+  };
+
+  const STORE_INFO = {
+    name: "ARM Pearl Beauty",
+    address:
+      "Malik Chambers, 404 & 405, Old MLA Quarters Road,Hyderguda Opp. Swathi Restaurant",
+    city: "Hyderabad",
+    state: "Telangana",
+    pincode: "500029",
+    phone: "9848210555",
+  };
+
+  const grandTotal =
+    savedOrder?.items?.reduce((sum, item) => sum + item.qty * item.price, 0) ||
+    0;
+
   const columns = useMemo(
     () => [
       {
