@@ -176,18 +176,21 @@ function Orders() {
         size: 50,
       },
       {
-        accessorKey: "productName",
-        header: "product Name",
+        header: "Products",
+        accessorFn: (row) =>
+          row.items?.map((item) => item.productName).join(", "),
         size: 80,
       },
       {
-        accessorKey: "qty",
-        header: "Quantity",
+        header: "Total Qty",
+        accessorFn: (row) =>
+          row.items?.reduce((sum, item) => sum + item.qty, 0),
         size: 50,
       },
       {
-        accessorKey: "price",
-        header: "Price",
+        header: "Amount",
+        accessorFn: (row) =>
+          row.items?.reduce((sum, item) => sum + item.qty * item.price, 0),
         size: 50,
       },
       {
