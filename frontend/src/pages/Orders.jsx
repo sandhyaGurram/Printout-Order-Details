@@ -189,6 +189,11 @@ function Orders() {
         accessorKey: "pincode",
         header: "Pincode",
       },
+      {
+        accessorKey: "createdAt",
+        header: "Created On",
+        Cell: ({ cell }) => new Date(cell.getValue()).toLocaleString("en-IN"),
+      },
     ],
     [],
   );
