@@ -173,7 +173,55 @@ function Orders() {
       (index) => orders[index],
     );
 
-    console.log("Selected Orders", selectedOrders);
+    const labelsHtml = selectedOrders
+      .map(
+        (order) => `
+        <div style="
+          page-break-after: always;
+          padding: 20px;
+          border: 1px solid #000;
+        ">
+          <h2>Shipping Label</h2>
+
+          <p><b>Name:</b> ${order.customerName}</p>
+          <p><b>Phone:</b> ${order.phone}</p>
+          <p><b>Address:</b> ${order.address}</p>
+          <p><b>Pincode:</b> ${order.pincode}</p>
+
+          <p><b>Payment:</b> ${order.paymentType}</p>
+
+          <hr/>
+
+          <h4>Shipped By</h4>
+
+          <p>${STORE_INFO.name}</p>
+          <p>${STORE_INFO.address}</p>
+          <p>${STORE_INFO.city}</p>
+          <p>${STORE_INFO.phone}</p>
+        </div>
+      `,
+      )
+      .join("");
+
+    const win = window.open("", "_blank");
+
+    win.document.write(`
+    <html>
+      <head>
+        <title>Print Labels</title>
+      </head>
+
+      <body>
+        ${labelsHtml}
+      </body>
+    </html>
+  `);
+
+    win.document.close();
+
+    setTimeout(() => {
+      win.print();
+    }, 500);
   };
 
   const STORE_INFO = {
