@@ -1,97 +1,54 @@
-// import { useState } from "react";
-// import AddOrder from "./pages/AddOrder";
-// import OrderPreview from "./components/OrderPreview";
-// import "./App.css";
-
-// function App() {
-
-//   const [savedOrder, setSavedOrder] = useState(null);
-
-//   return (
-//     <div className="container">
-
-//       <h1 className="title">
-//         Thermal Print App
-//       </h1>
-
-//       <div className="layout">
-
-//         <div className="form-section">
-//           <AddOrder
-//             setSavedOrder={setSavedOrder}
-//           />
-//         </div>
-
-//         <div className="orders-section">
-//           <OrderPreview
-//             order={savedOrder}
-//           />
-//         </div>
-
-//       </div>
-
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
 import { useState } from "react";
 import axios from "axios";
 import { useRef } from "react";
 import "./App.css";
 
-
 function App() {
-
- const [formData, setFormData] = useState({
-  customerName: "",
-  phone: "",
-  address: "",
-  pincode: "",
-  orderId: "",
-  paymentType: "",
-  items: [
-    {
-      productName: "",
-      qty: 1,
-      price: 0
-    }
-  ]
-});
-
-  const [savedOrder, setSavedOrder] = useState(null);
-
-  
-  const labelRef = useRef();
-
-  const addProduct = () => {
-  setFormData({
-    ...formData,
+  const [formData, setFormData] = useState({
+    customerName: "",
+    phone: "",
+    address: "",
+    pincode: "",
+    orderId: "",
+    paymentType: "",
     items: [
-      ...formData.items,
       {
         productName: "",
         qty: 1,
-        price: 0
-      }
-    ]
+        price: 0,
+      },
+    ],
   });
+
+  const [savedOrder, setSavedOrder] = useState(null);
+
+  const labelRef = useRef();
+
+  const addProduct = () => {
+    setFormData({
+      ...formData,
+      items: [
+        ...formData.items,
+        {
+          productName: "",
+          qty: 1,
+          price: 0,
+        },
+      ],
+    });
   };
-  
+
   const handleItemChange = (index, e) => {
-  const updatedItems = [...formData.items];
+    const updatedItems = [...formData.items];
 
-  updatedItems[index][e.target.name] = e.target.value;
+    updatedItems[index][e.target.name] = e.target.value;
 
-  setFormData({
-    ...formData,
-    items: updatedItems
-  });
-};
-  
+    setFormData({
+      ...formData,
+      items: updatedItems,
+    });
+  };
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -100,31 +57,30 @@ function App() {
   };
 
   const handleSave = async () => {
-
     const res = await axios.post(
-       "https://printout-order-details-backend.onrender.com/api/orders",
-      formData
+      "https://printout-order-details-backend.onrender.com/api/orders",
+      formData,
     );
 
     setSavedOrder(res.data);
 
-   setFormData({
-  customerName: "",
-  phone: "",
-  address: "",
-  pincode: "",
-  orderId: "",
-  paymentType: "",
-  items: []
-});
+    setFormData({
+      customerName: "",
+      phone: "",
+      address: "",
+      pincode: "",
+      orderId: "",
+      paymentType: "",
+      items: [],
+    });
   };
 
-const handlePrint = () => {
-  const printContents = labelRef.current.innerHTML;
+  const handlePrint = () => {
+    const printContents = labelRef.current.innerHTML;
 
-  const win = window.open("", "", "");
+    const win = window.open("", "", "");
 
-  win.document.write(`
+    win.document.write(`
     <html>
       <head>
         <title>Print Label</title>
@@ -157,12 +113,26 @@ const handlePrint = () => {
             text-align: center;
           }
 
-          // th {
-          //   font-weight: bold;
-          // }
-          .lable-preview tbody td{
-          font-size:12px;
-          }
+          td.item-col {
+  width: 50%;
+  font-size: 9px;
+}
+
+td.qty-col {
+  width: 10%;
+}
+
+td.price-col {
+  width: 20%;
+}
+
+td.total-col {
+  width: 20%;
+}
+          tbody td,th {
+  font-size: 9px;
+  
+}
 
         </style>
       </head>
@@ -173,37 +143,34 @@ const handlePrint = () => {
     </html>
   `);
 
-  win.document.close();
-  win.print();
-  win.close();
-};
-
+    win.document.close();
+    win.print();
+    win.close();
+  };
 
   const STORE_INFO = {
-  name: "ARM Pearl Beauty",
-  address: "Malik Chambers, 404 & 405, Old MLA Quarters Road,Hyderguda Opp. Swathi Restaurant",
-  city: "Hyderabad",
-  state: "Telangana",
-  pincode: "500029",
-  phone: "9848210555"
-};
+    name: "ARM Pearl Beauty",
+    address:
+      "Malik Chambers, 404 & 405, Old MLA Quarters Road,Hyderguda Opp. Swathi Restaurant",
+    city: "Hyderabad",
+    state: "Telangana",
+    pincode: "500029",
+    phone: "9848210555",
+  };
 
-  
   const grandTotal =
-  savedOrder?.items?.reduce(
-    (sum, item) => sum + item.qty * item.price,
-    0
-  ) || 0;
+    savedOrder?.items?.reduce((sum, item) => sum + item.qty * item.price, 0) ||
+    0;
 
   return (
-    <div style={{
-      display: "flex",
-      gap: "30px",
-      padding: "20px"
-    }}>
-
+    <div
+      style={{
+        display: "flex",
+        gap: "30px",
+        padding: "20px",
+      }}
+    >
       <div>
-
         <h2>Order Form</h2>
 
         <input
@@ -217,63 +184,51 @@ const handlePrint = () => {
 
         <h3>Products</h3>
 
-<table border="1" width="100%">
-  <thead>
-    <tr>
-      <th>Product Name</th>
-      <th>Qty</th>
-      <th>Price</th>
-    </tr>
-  </thead>
+        <table border="1" width="100%">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Qty</th>
+              <th>Price</th>
+            </tr>
+          </thead>
 
-  <tbody>
-    {formData.items.map((item, index) => (
-      <tr key={index}>
+          <tbody>
+            {formData.items.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    name="productName"
+                    value={item.productName}
+                    onChange={(e) => handleItemChange(index, e)}
+                  />
+                </td>
 
-        <td>
-          <input
-            type="text"
-            name="productName"
-            value={item.productName}
-            onChange={(e) =>
-              handleItemChange(index, e)
-            }
-          />
-        </td>
+                <td>
+                  <input
+                    type="number"
+                    name="qty"
+                    value={item.qty}
+                    onChange={(e) => handleItemChange(index, e)}
+                  />
+                </td>
 
-        <td>
-          <input
-            type="number"
-            name="qty"
-            value={item.qty}
-            onChange={(e) =>
-              handleItemChange(index, e)
-            }
-          />
-        </td>
-
-        <td>
-          <input
-            type="number"
-            name="price"
-            value={item.price}
-            onChange={(e) =>
-              handleItemChange(index, e)
-            }
-          />
-        </td>
-
-      </tr>
-    ))}
-  </tbody>
+                <td>
+                  <input
+                    type="number"
+                    name="price"
+                    value={item.price}
+                    onChange={(e) => handleItemChange(index, e)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
-        <button
-  type="button"
-  onClick={addProduct}
->
-  + Add Product
+        <button type="button" onClick={addProduct}>
+          + Add Product
         </button>
-        
 
         <input
           name="phone"
@@ -307,89 +262,93 @@ const handlePrint = () => {
           value={formData.orderId}
           onChange={handleChange}
         />
-     
-<br/>
+
+        <br />
         <select
-  name="paymentType"
-  value={formData.paymentType}
-  onChange={handleChange}
->
-  <option value="">Select Payment Type</option>
-  <option value="COD">COD</option>
-  <option value="Prepaid">Prepaid</option>
-</select>
+          name="paymentType"
+          value={formData.paymentType}
+          onChange={handleChange}
+        >
+          <option value="">Select Payment Type</option>
+          <option value="COD">COD</option>
+          <option value="Prepaid">Prepaid</option>
+        </select>
 
         <br />
 
-        <button onClick={handleSave}>
-          Save Order
-        </button>
-
+        <button onClick={handleSave}>Save Order</button>
       </div>
 
       <div className="lable-preview">
-
         <h2>Label Preview</h2>
 
         {savedOrder && (
-          <div  ref={labelRef} id="label">
-            <p><strong>Ship to:</strong></p>
+          <div ref={labelRef} id="label">
+            <p>
+              <strong>Ship to:</strong>
+            </p>
 
-            <p><strong>Name: </strong>{savedOrder.customerName}</p>
-            <p><strong>Address: </strong>{savedOrder.address}, {savedOrder.pincode}</p>
+            <p>
+              <strong>Name: </strong>
+              {savedOrder.customerName}
+            </p>
+            <p>
+              <strong>Address: </strong>
+              {savedOrder.address}, {savedOrder.pincode}
+            </p>
 
-            <p><strong>Phone: </strong> {savedOrder.phone}</p>
+            <p>
+              <strong>Phone: </strong> {savedOrder.phone}
+            </p>
 
-            <p><strong>Order Id: </strong>{savedOrder.orderId}</p>
+            <p>
+              <strong>Order Id: </strong>
+              {savedOrder.orderId}
+            </p>
 
-            <p><strong>Payment: </strong>{savedOrder.paymentType}</p>
+            <p>
+              <strong>Payment: </strong>
+              {savedOrder.paymentType}
+            </p>
             <table className="table table-bordered">
-              {/* <thead>
-  <tr>
-    <th>Item</th>
-    <th>Quantity</th>
-    <th>Price</th>
-    <th>Total</th>
-  </tr>
-</thead> */}
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
               <tbody>
-  {savedOrder.items?.map((item, index) => (
-    <tr key={index}>
-      <td>{item.productName}</td>
-      <td>{item.qty}</td>
-      <td>{item.price}</td>
-      <td>{item.qty * item.price}</td>
-    </tr>
-  ))}
-</tbody>
+                {savedOrder.items?.map((item, index) => (
+                  <tr key={index}>
+                    <td className="item-col">{item.productName}</td>
+                    <td className="qty-col">{item.qty}</td>
+                    <td className="price-col">{item.price}</td>
+                    <td className="total-col">{item.qty * item.price}</td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
             <p>
-  <strong>Grand Total:</strong> ₹{grandTotal}
-</p>
-        
-            <p><strong>Shipped by</strong>(if undelivered, return to)</p>
+              <strong>Grand Total:</strong> ₹{grandTotal}
+            </p>
+
+            <p>
+              <strong>Shipped by</strong>(if undelivered, return to)
+            </p>
             <p>{STORE_INFO.name}</p>
 
-  <p>{STORE_INFO.address}</p>
-  <p>
-    {STORE_INFO.city}, {STORE_INFO.state}, {STORE_INFO.pincode}
-  </p>
- 
-  <p>{STORE_INFO.phone}</p>
+            <p>{STORE_INFO.address}</p>
+            <p>
+              {STORE_INFO.city}, {STORE_INFO.state}, {STORE_INFO.pincode}
+            </p>
 
-            
-
+            <p>{STORE_INFO.phone}</p>
           </div>
-          
         )}
-            {savedOrder && (
-  <button onClick={handlePrint}>
-    Print Label
-  </button>
-)}
-
+        {savedOrder && <button onClick={handlePrint}>Print Label</button>}
       </div>
-
     </div>
   );
 }
