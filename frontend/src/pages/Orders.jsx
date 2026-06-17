@@ -284,9 +284,9 @@ function Orders() {
 
       <body>
 
-         <h2 style="text-align:center">
+         <p style="text-align:center">
     SHIPPING LABEL
-  </h2>
+  </p>
 
         <p><b>Name:</b> ${order.customerName}</p>
         <p><b>Phone:</b> ${order.phone}</p>
