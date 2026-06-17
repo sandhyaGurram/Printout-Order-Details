@@ -186,10 +186,6 @@ td.total-col {
     phone: "9848210555",
   };
 
-  const grandTotal =
-    savedOrder?.items?.reduce((sum, item) => sum + item.qty * item.price, 0) ||
-    0;
-
   return (
     <div
       style={{
