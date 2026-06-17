@@ -18,7 +18,7 @@ function AddOrder() {
     ],
   });
 
-  const [savedOrder, setSavedOrder] = useState(null);
+  // const [savedOrder, setSavedOrder] = useState(null);
 
   const labelRef = useRef();
 
@@ -55,23 +55,53 @@ function AddOrder() {
   };
 
   const handleSave = async () => {
-    const res = await axios.post(
-      "https://printout-order-details-backend.onrender.com/api/orders",
-      formData,
-    );
+    try {
+      await axios.post(
+        "https://printout-order-details-backend.onrender.com/api/orders",
+        formData,
+      );
 
-    setSavedOrder(res.data);
+      alert("Order Saved Successfully!");
 
-    setFormData({
-      customerName: "",
-      phone: "",
-      address: "",
-      pincode: "",
-      orderId: "",
-      paymentType: "",
-      items: [],
-    });
+      setFormData({
+        customerName: "",
+        phone: "",
+        address: "",
+        pincode: "",
+        orderId: "",
+        paymentType: "",
+        items: [
+          {
+            productName: "",
+            qty: 1,
+            price: 0,
+          },
+        ],
+      });
+    } catch (error) {
+      alert("Failed to save order");
+      console.error(error);
+    }
   };
+
+  // const handleSave = async () => {
+  //   const res = await axios.post(
+  //     "https://printout-order-details-backend.onrender.com/api/orders",
+  //     formData,
+  //   );
+
+  //   setSavedOrder(res.data);
+
+  //   setFormData({
+  //     customerName: "",
+  //     phone: "",
+  //     address: "",
+  //     pincode: "",
+  //     orderId: "",
+  //     paymentType: "",
+  //     items: [],
+  //   });
+  // };
 
   const handlePrint = () => {
     const printContents = labelRef.current.innerHTML;
@@ -277,7 +307,7 @@ td.total-col {
         <button onClick={handleSave}>Save Order</button>
       </div>
 
-      <div className="lable-preview">
+      {/* <div className="lable-preview">
         <h2>Label Preview</h2>
 
         {savedOrder && (
@@ -346,180 +376,9 @@ td.total-col {
           </div>
         )}
         {savedOrder && <button onClick={handlePrint}>Print Label</button>}
-      </div>
+      </div> */}
     </div>
   );
 }
-
-//   const [formData, setFormData] = useState({
-//   orderId: "",
-//   customerName: "",
-//   phone: "",
-//   address: "",
-//   city: "",
-//   state: "",
-//   pincode: "",
-//   paymentType: "",
-//   items: [
-//     {
-//       productName: "",
-//           qty: 1,
-//       price: 0,
-//     },
-//   ],
-// });
-
-//   const handleChange = (e) => {
-//     setFormData({
-//       ...formData,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-
-//   const handleProductChange = (e) => {
-//     const { name, value } = e.target;
-
-//     setFormData({
-//       ...formData,
-//       items: [
-//         {
-//           ...formData.items[0],
-//           [name]:
-//   name === "qty" || name === "price"
-//     ? Number(value)
-//     : value,
-//         },
-//       ],
-//     });
-//   };
-
-//   const submitOrder = async () => {
-//     console.log(formData);
-
-//     const response = await axios.post(
-//     "http://localhost:5000/api/orders",
-//     formData
-//   );
-
-//       alert("Order Saved");
-
-//         setFormData({
-//   orderId: "",
-//   customerName: "",
-//   phone: "",
-//   address: "",
-//   city: "",
-//   state: "",
-//   pincode: "",
-//   paymentType: "",
-//   items: [
-//     {
-//       productName: "",
-//       qty: 1,
-//       price: 0,
-//     },
-//   ],
-// });
-//   };
-
-//   return (
-//     <>
-//           <input
-//               className="input"
-//         name="customerName"
-//         placeholder="Customer Name"
-//         onChange={handleChange}
-//       />
-
-//       <br /><br />
-
-//           <input
-//               className="input"
-//         name="phone"
-//         placeholder="Phone"
-//         onChange={handleChange}
-//       />
-
-//       <br /><br />
-
-//           <input
-//               className="input"
-//         type="text"
-//         name="productName"
-//         placeholder="Product Name"
-//         onChange={handleProductChange}
-//       />
-
-//       <br /><br />
-
-//           <input
-//               className="input"
-//         type="number"
-//         name="qty"
-//         placeholder="Quantity"
-//         onChange={handleProductChange}
-//       />
-
-//           <br /><br />
-
-//           <input
-//   className="input"
-//   type="number"
-//   name="price"
-//   placeholder="Price"
-//   onChange={handleProductChange}
-// />
-//         <br /><br />
-//           <input
-//               className="input"
-//   name="address"
-//   placeholder="Address"
-//   onChange={handleChange}
-// />
-
-// <br /><br />
-
-//           <input
-//               className="input"
-//   name="city"
-//   placeholder="City"
-//   onChange={handleChange}
-// />
-
-// <br /><br />
-
-//           <input
-//               className="input"
-//   name="state"
-//   placeholder="State"
-//   onChange={handleChange}
-// />
-
-// <br /><br />
-
-//           <input
-//               className="input"
-//   name="pincode"
-//   placeholder="Pincode"
-//   onChange={handleChange}
-// />
-
-// <br /><br />
-
-//           <input
-//               className="input"
-//   name="paymentType"
-//   placeholder="Payment Type (COD/Prepaid)"
-//   onChange={handleChange}
-// />
-
-// <br /><br />
-
-//       <button onClick={submitOrder}>
-//         Save Order
-//       </button>
-//     </>
-//   );
-// }
 
 export default AddOrder;
