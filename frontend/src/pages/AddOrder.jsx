@@ -18,8 +18,6 @@ function AddOrder() {
     ],
   });
 
-  // const [savedOrder, setSavedOrder] = useState(null);
-
   const labelRef = useRef();
 
   const addProduct = () => {
@@ -83,25 +81,6 @@ function AddOrder() {
       console.error(error);
     }
   };
-
-  // const handleSave = async () => {
-  //   const res = await axios.post(
-  //     "https://printout-order-details-backend.onrender.com/api/orders",
-  //     formData,
-  //   );
-
-  //   setSavedOrder(res.data);
-
-  //   setFormData({
-  //     customerName: "",
-  //     phone: "",
-  //     address: "",
-  //     pincode: "",
-  //     orderId: "",
-  //     paymentType: "",
-  //     items: [],
-  //   });
-  // };
 
   const handlePrint = () => {
     const printContents = labelRef.current.innerHTML;
@@ -302,77 +281,6 @@ td.total-col {
 
         <button onClick={handleSave}>Save Order</button>
       </div>
-
-      {/* <div className="lable-preview">
-        <h2>Label Preview</h2>
-
-        {savedOrder && (
-          <div ref={labelRef} id="label">
-            <p>
-              <strong>Ship to:</strong>
-            </p>
-
-            <p>
-              <strong>Name: </strong>
-              {savedOrder.customerName}
-            </p>
-            <p>
-              <strong>Address: </strong>
-              {savedOrder.address}, {savedOrder.pincode}
-            </p>
-
-            <p>
-              <strong>Phone: </strong> {savedOrder.phone}
-            </p>
-
-            <p>
-              <strong>Order Id: </strong>
-              {savedOrder.orderId}
-            </p>
-
-            <p>
-              <strong>Payment: </strong>
-              {savedOrder.paymentType}
-            </p>
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {savedOrder.items?.map((item, index) => (
-                  <tr key={index}>
-                    <td className="item-col">{item.productName}</td>
-                    <td className="qty-col">{item.qty}</td>
-                    <td className="price-col">{item.price}</td>
-                    <td className="total-col">{item.qty * item.price}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p>
-              <strong>Grand Total:</strong> ₹{grandTotal}
-            </p>
-
-            <p>
-              <strong>Shipped by</strong>(if undelivered, return to)
-            </p>
-            <p>{STORE_INFO.name}</p>
-
-            <p>{STORE_INFO.address}</p>
-            <p>
-              {STORE_INFO.city}, {STORE_INFO.state}, {STORE_INFO.pincode}
-            </p>
-
-            <p>{STORE_INFO.phone}</p>
-          </div>
-        )}
-        {savedOrder && <button onClick={handlePrint}>Print Label</button>}
-      </div> */}
     </div>
   );
 }

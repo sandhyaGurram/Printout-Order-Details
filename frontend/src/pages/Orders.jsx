@@ -1,156 +1,9 @@
-// // import { useEffect, useState, useRef } from "react";
-// // import axios from "axios";
-// // import { useReactToPrint } from "react-to-print";
-// // import PrintLabel from "../components/PrintLabel";
-
-// // function Orders() {
-
-// //     const [orders, setOrders] = useState([]);
-// //     const printRef = useRef();
-
-// // const [selectedOrder, setSelectedOrder] = useState(null);
-
-// // const handlePrint = useReactToPrint({
-// //     contentRef: printRef,
-// // });
-
-// //   useEffect(() => {
-// //     fetchOrders();
-// //   }, []);
-
-// //   const fetchOrders = async () => {
-// //     const response = await axios.get(
-// //       "http://localhost:5000/api/orders"
-// //     );
-
-// //     setOrders(response.data);
-// //   };
-
-// //     <div
-// //     style={{
-// //         position: "absolute",
-// //         left: "-9999px",
-// //     }}
-// // >
-// //     <div ref={printRef}>
-// //         <PrintLabel order={selectedOrder} />
-// //     </div>
-// //     </div>
-
-// //   return (
-// //   <div>
-
-// //     <h2>Orders List</h2>
-
-// //     {orders.map((order) => (
-// //       <div
-// //         key={order._id}
-// //         style={{
-// //           border: "1px solid #ccc",
-// //           marginBottom: "10px",
-// //           padding: "10px"
-// //         }}
-// //       >
-// //         <h3>Name: {order.customerName}</h3>
-
-// //         <p>Phone: {order.phone}</p>
-
-// //         {order.items.map((item, index) => (
-// //           <div key={index}>
-// //             Product: {item.productName} × {item.qty}
-// //           </div>
-// //         ))}
-
-// //         <p>Address: {order.address}</p>
-// //         <p>City: {order.city}</p>
-// //         <p>State: {order.state}</p>
-// //         <p>Pincode: {order.pincode}</p>
-// //         <p>Payment: {order.paymentType}</p>
-
-// //         <button
-// //           className="btn"
-// //           onClick={() => {
-// //             setSelectedOrder(order);
-
-// //             setTimeout(() => {
-// //               handlePrint();
-// //             }, 100);
-// //           }}
-// //         >
-// //           Print Label
-// //         </button>
-// //       </div>
-// //     ))}
-
-// //     {/* Hidden Print Area */}
-// //     <div
-// //       style={{
-// //         position: "absolute",
-// //         left: "-9999px",
-// //       }}
-// //     >
-// //       <div ref={printRef}>
-// //         <PrintLabel order={selectedOrder} />
-// //       </div>
-// //     </div>
-
-// //   </div>
-// // );
-// // }
-
-// // export default Orders;
-
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-
-// function Orders() {
-//   const [orders, setOrders] = useState([]);
-
-//   useEffect(() => {
-//     axios
-//       .get("https://printout-order-details-backend.onrender.com/api/orders")
-//       .then((res) => {
-//         setOrders(res.data);
-//       });
-//   }, []);
-
-//   return (
-//     <div>
-//       <h2>Saved Orders</h2>
-
-//       <table border="1" width="100%">
-//         <thead>
-//           <tr>
-//             <th>Order ID</th>
-//             <th>Customer</th>
-//             <th>Phone</th>
-//             <th>Payment</th>
-//             <th>Pincode</th>
-//           </tr>
-//         </thead>
-
-//         <tbody>
-//           {orders.map((order) => (
-//             <tr key={order._id}>
-//               <td>{order.orderId}</td>
-//               <td>{order.customerName}</td>
-//               <td>{order.phone}</td>
-//               <td>{order.paymentType}</td>
-//               <td>{order.pincode}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
-
-// export default Orders;
-
 // ================================================================================================
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { MaterialReactTable } from "material-react-table";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -164,65 +17,98 @@ function Orders() {
       });
   }, []);
 
-  // const printLabel = (order) => {
-  //   console.log("Single Print", order);
-  // };
+  const exportToExcel = () => {
+    const excelData = orders.map((order) => ({
+      "Order ID": order.orderId,
+      Customer: order.customerName,
+      Phone: order.phone,
+      Address: order.address,
+      Pincode: order.pincode,
+      Payment: order.paymentType,
 
-  const printSelectedLabels = () => {
-    const selectedOrders = Object.keys(rowSelection).map(
-      (index) => orders[index],
-    );
+      Products: order.items?.map((item) => item.productName).join(", ") || "",
 
-    const labelsHtml = selectedOrders
-      .map(
-        (order) => `
-        <div style="
-          page-break-after: always;
-          padding: 20px;
-          border: 1px solid #000;
-        ">
-          <h2>Shipping Label</h2>
+      "Total Qty": order.items?.reduce((sum, item) => sum + item.qty, 0) || 0,
 
-          <p><b>Name:</b> ${order.customerName}</p>
-          <p><b>Phone:</b> ${order.phone}</p>
-          <p><b>Address:</b> ${order.address}</p>
-          <p><b>Pincode:</b> ${order.pincode}</p>
+      Amount:
+        order.items?.reduce((sum, item) => sum + item.qty * item.price, 0) || 0,
 
-          <p><b>Payment:</b> ${order.paymentType}</p>
+      "Created On": new Date(order.createdAt).toLocaleString("en-IN"),
+    }));
 
-          <hr/>
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
 
-          <h4>Shipped By</h4>
+    const workbook = XLSX.utils.book_new();
 
-          <p>${STORE_INFO.name}</p>
-          <p>${STORE_INFO.address}</p>
-          <p>${STORE_INFO.city}</p>
-          <p>${STORE_INFO.phone}</p>
-        </div>
-      `,
-      )
-      .join("");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
 
-    const win = window.open("", "_blank");
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
 
-    win.document.write(`
-    <html>
-      <head>
-        <title>Print Labels</title>
-      </head>
+    const data = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
 
-      <body>
-        ${labelsHtml}
-      </body>
-    </html>
-  `);
-
-    win.document.close();
-
-    setTimeout(() => {
-      win.print();
-    }, 500);
+    saveAs(data, "Orders.xlsx");
   };
+
+  // const printSelectedLabels = () => {
+  //   const selectedOrders = Object.keys(rowSelection).map(
+  //     (index) => orders[index],
+  //   );
+
+  //   const labelsHtml = selectedOrders
+  //     .map(
+  //       (order) => `
+  //       <div style="
+  //         page-break-after: always;
+  //         padding: 20px;
+  //         border: 1px solid #000;
+  //       ">
+  //         <h2>Shipping Label</h2>
+
+  //         <p><b>Name:</b> ${order.customerName}</p>
+  //         <p><b>Phone:</b> ${order.phone}</p>
+  //         <p><b>Address:</b> ${order.address}</p>
+  //         <p><b>Pincode:</b> ${order.pincode}</p>
+
+  //         <p><b>Payment:</b> ${order.paymentType}</p>
+
+  //         <hr/>
+
+  //         <h4>Shipped By</h4>
+
+  //         <p>${STORE_INFO.name}</p>
+  //         <p>${STORE_INFO.address}</p>
+  //         <p>${STORE_INFO.city}</p>
+  //         <p>${STORE_INFO.phone}</p>
+  //       </div>
+  //     `,
+  //     )
+  //     .join("");
+
+  //   const win = window.open("", "_blank");
+
+  //   win.document.write(`
+  //   <html>
+  //     <head>
+  //       <title>Print Labels</title>
+  //     </head>
+
+  //     <body>
+  //       ${labelsHtml}
+  //     </body>
+  //   </html>
+  // `);
+
+  //   win.document.close();
+
+  //   setTimeout(() => {
+  //     win.print();
+  //   }, 500);
+  // };
 
   const STORE_INFO = {
     name: "ARM Pearl Beauty",
@@ -418,7 +304,7 @@ function Orders() {
           margin: "10px auto",
         }}
       >
-        <button onClick={printSelectedLabels}>Print Selected Labels</button>
+        <button onClick={exportToExcel}>Download Excel</button>
         <MaterialReactTable
           columns={columns}
           data={orders}
